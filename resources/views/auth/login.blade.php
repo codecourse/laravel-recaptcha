@@ -5,16 +5,22 @@
     <form
         method="POST"
         action="{{ route('login') }}"
-        x-data
+        x-data="{ recaptcha_token: null }"
         x-on:submit.prevent="
             grecaptcha.ready(() => {
                 grecaptcha.execute('{{ config('recaptcha.key') }}', { action: 'submit' }).then((token) => {
-                    //
+                    recaptcha_token = token
+
+                    $nextTick(() => {
+                        $el.submit()
+                    })
                 })
             })
         "
     >
         @csrf
+
+        <input type="hidden" name="recaptcha_token" x-bind:value="recaptcha_token">
 
         <!-- Email Address -->
         <div>
