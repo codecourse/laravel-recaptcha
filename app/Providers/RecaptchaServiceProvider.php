@@ -21,12 +21,12 @@ class RecaptchaServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Blade::directive('recaptcha', function () {
+        Blade::directive('recaptcha', function (string $action) {
             return new HtmlString('
                 x-data
                 x-on:submit.prevent="
                     grecaptcha.ready(() => {
-                        grecaptcha.execute(\'' . config('recaptcha.key') . '\', { action: \'submit\' }).then((token) => {
+                        grecaptcha.execute(\'' . config('recaptcha.key') . '\', { action: ' . $action . ' }).then((token) => {
                             let input = document.createElement(\'input\')
                             input.setAttribute(\'type\', \'hidden\')
                             input.setAttribute(\'name\', \'recaptcha_token\')
