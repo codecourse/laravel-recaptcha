@@ -2,7 +2,18 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    <form
+        method="POST"
+        action="{{ route('login') }}"
+        x-data
+        x-on:submit.prevent="
+            grecaptcha.ready(() => {
+                grecaptcha.execute('{{ config('recaptcha.key') }}', { action: 'submit' }).then((token) => {
+                    //
+                })
+            })
+        "
+    >
         @csrf
 
         <!-- Email Address -->
